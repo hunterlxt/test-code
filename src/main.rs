@@ -1,7 +1,4 @@
-mod test_transmute;
-mod test_result_option;
+mod result_option;
+mod transmute;
 
-fn main() {
-    test_transmute::test_function_pointer();
-    test_transmute::test_str_to_u8();
-}
+fn main() {}
