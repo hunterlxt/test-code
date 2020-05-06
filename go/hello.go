@@ -1,37 +1,38 @@
 package main
 
 import (
-	"context"
-	"log"
-	"net"
+	"database/sql"
+	"fmt"
 
-	"google.golang.org/grpc"
-	pb "google.golang.org/grpc/examples/helloworld/helloworld"
+	_ "github.com/go-sql-driver/mysql"
 )
 
-const (
-	port = ":50051"
-)
+func sum(s []int, c chan int) {
 
-// server is used to implement helloworld.GreeterServer.
-type server struct {
-	pb.UnimplementedGreeterServer
-}
-
-// SayHello implements helloworld.GreeterServer
-func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
-	log.Printf("Received: %v", in.GetName())
-	return &pb.HelloReply{Message: "Hello " + in.GetName()}, nil
 }
 
 func main() {
-	lis, err := net.Listen("tcp", port)
-	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+	dsn := fmt.Sprintf("root@tcp(172.16.111.11:33000)/test")
+	db, e := sql.Open("mysql", dsn)
+	if e != nil {
+		fmt.Printf("%v", e)
 	}
-	s := grpc.NewServer()
-	pb.RegisterGreeterServer(s, &server{})
-	if err := s.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
+	_, e = db.Exec("set @@tidb_replica_read = \"leader\"")
+	if e != nil {
+		fmt.Printf("e != nil")
+	}
+
+	fmt.Println("prepare..")
+	prepare(db)
+
+	fmt.Println("select..")
+	for i := 0; i < 1000000; i++ {
+		db.Exec("select * from x")
+	}
+}
+
+func prepare(db *sql.DB) {
+	for i := 0; i < 10000; i++ {
+		db.Exec(fmt.Sprintf("insert into x (a) values (%v)", i))
 	}
 }
