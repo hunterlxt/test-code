@@ -19,9 +19,18 @@ func main() {
 	if err != nil {
 		fmt.Print(err)
 	}
-	_, err = db.Exec("show tables")
+	defer db.Close()
+
+	rows, err := db.Query("show tables")
 	if err != nil {
 		fmt.Print(err)
 	}
-	defer db.Close()
+	defer rows.Close()
+	for rows.Next() {
+		var v string
+		if err = rows.Scan(&v); err != nil {
+			fmt.Print(err)
+			return
+		}
+	}
 }
