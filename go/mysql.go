@@ -29,7 +29,7 @@ func main() {
 	for rows.Next() {
 		var v string
 		if err = rows.Scan(&v); err != nil {
-			fmt.Print(err)
+			fmt.Print(v)
 			return
 		}
 	}
