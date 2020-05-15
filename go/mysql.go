@@ -29,8 +29,9 @@ func main() {
 	for rows.Next() {
 		var v string
 		if err = rows.Scan(&v); err != nil {
-			fmt.Print(v)
+			fmt.Print(err)
 			return
 		}
+		fmt.Print(v)
 	}
 }
