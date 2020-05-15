@@ -21,7 +21,7 @@ func main() {
 	}
 	defer db.Close()
 
-	rows, err := db.Query("show tables")
+	rows, err := db.Query("quit")
 	if err != nil {
 		fmt.Print(err)
 	}
