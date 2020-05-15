@@ -3,3 +3,6 @@ name = "test-rust"
 version = "0.1.0"
 authors = ["Xintao <hunterlxt@live.com>"]
 edition = "2018"
+
+[dependencies]
+fail = "0"

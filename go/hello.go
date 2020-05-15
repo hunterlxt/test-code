@@ -1,38 +1,24 @@
 package main
 
-import (
-	"database/sql"
-	"fmt"
-
-	_ "github.com/go-sql-driver/mysql"
-)
-
-func sum(s []int, c chan int) {
-
-}
+import "fmt"
 
 func main() {
-	dsn := fmt.Sprintf("root@tcp(172.16.111.11:33000)/test")
-	db, e := sql.Open("mysql", dsn)
-	if e != nil {
-		fmt.Printf("%v", e)
-	}
-	_, e = db.Exec("set @@tidb_replica_read = \"leader\"")
-	if e != nil {
-		fmt.Printf("e != nil")
-	}
+	s := []int{2, 3, 5, 7, 11, 13}
+	printSlice(s)
 
-	fmt.Println("prepare..")
-	prepare(db)
+	// 截取切片使其长度为 0
+	s = s[:0]
+	printSlice(s)
 
-	fmt.Println("select..")
-	for i := 0; i < 1000000; i++ {
-		db.Exec("select * from x")
-	}
+	// 拓展其长度
+	s = s[:4]
+	printSlice(s)
+
+	// 舍弃前两个值
+	s = s[2:]
+	printSlice(s)
 }
 
-func prepare(db *sql.DB) {
-	for i := 0; i < 10000; i++ {
-		db.Exec(fmt.Sprintf("insert into x (a) values (%v)", i))
-	}
+func printSlice(s []int) {
+	fmt.Printf("len=%d cap=%d %v\n", len(s), cap(s), s)
 }
