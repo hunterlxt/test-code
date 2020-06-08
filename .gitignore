@@ -1,4 +1,5 @@
 .vscode
+.build
 rust/target
 rust/Cargo.lock
 go/go.sum
