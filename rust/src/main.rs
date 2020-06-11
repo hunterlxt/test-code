@@ -1,5 +1,5 @@
-use test_rust::future_learn;
+use test_rust::timer_future;
 
 fn main() {
-    future_learn::run_sing_song_test();
+    timer_future::run();
 }
